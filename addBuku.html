@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Kebutuhan Buku - Pengadaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="no-background">
+<nav>
+        <div class="brand">Unibookstore</div>
+        <a href="index.html">Logout</a>
+        <a href="main.html">Home</a>
+        <a href="admin.html">Admin</a>
+        <a href="pengadaan.html">Pengadaan</a>
+    </nav>
+    <div class="container mx-auto p-8">
+        <h3 class="text-xl font-bold mb-4">Tambah Buku</h3>
+        <form id="form_add_buku" class="mb-8">
+            <!-- id buku -->
+            <div class="mb-4 ">
+                <label for="id_buku" class="block text-sm font-medium text-gray-600">ID Buku:</label>
+                <input type="text" id="id_buku" name="id_buku" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <!-- Kategori -->
+            <div class="mb-4">
+                <label for="kategori" class="block text-sm font-medium text-gray-600">Kategori:</label>
+                <input type="text" id="kategori" name="kategori" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <!-- Nama Buku -->
+            <div class="mb-4">
+                <label for="nama_buku" class="block text-sm font-medium text-gray-600">Nama Buku:</label>
+                <input type="text" id="nama_buku" name="nama_buku" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <div class="mb-4">
+                <label for="nama_buku" class="block text-sm font-medium text-gray-600">Tahun:</label>
+                <input type="text" id="tahun" name="tahun" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <!-- Harga -->
+            <div class="mb-4">
+                <label for="harga" class="block text-sm font-medium text-gray-600">Harga:</label>
+                <input type="text" id="harga" name="harga" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <!-- Stock -->
+            <div class="mb-4">
+                <label for="stok" class="block text-sm font-medium text-gray-600">Stock:</label>
+                <input type="text" id="stok" name="stok" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <!-- Penerbit -->
+            <div class="mb-4">
+                <label for="penerbit" class="block text-sm font-medium text-gray-600">Penerbit:</label>
+                <input type="text" id="penerbit" name="penerbit" required class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+            <button type="submit" id="bukuButton" class="bg-blue-500 text-white p-2 rounded-md cursor-pointer">
+                Tambah Buku
+            </button>
+        </form>
+    </div>
+    </div>
+
+    <script>
+        const formBuku = document.querySelector('#form_add_buku');
+        const postToBuku = async (body) => {
+            try {
+                const response = await fetch('https://perpustakaan-tdrgo7wffa-et.a.run.app/buku/create', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        formBuku.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const body = {
+                "id_buku": id_buku.value,
+                "kategori": kategori.value,
+                "nama_buku": nama_buku.value,
+                "tahun": tahun.value,
+                "harga": parseInt(harga.value),
+                "stok": parseInt(stok.value),
+                "penerbit": penerbit.value
+            };
+            console.log(body)
+            const result = await postToBuku(body);
+            
+            if (result.msg = "Data Buku berhasil dibuat") {
+                location.replace('admin.html')
+            }
+        });
+    </script>
+</body>
+</html>

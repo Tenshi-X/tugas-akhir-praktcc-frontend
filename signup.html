@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>Sign Up</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <center>
+    <div class="form-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width:500px; margin:auto;">
+      <div class="row mb-4">
+        <h1>UNIBOOKSTORE</h1>
+      </div>
+      <div class="row">
+        <form id="form_register">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" placeholder="Username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmpassword" placeholder="Confirm Password" name="confirmpassword" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Sign Up</button>
+          </form>
+          <p style="margin-top: 10px;">Already have an account? <a href="index.html" class="text-primary">Sign in</a></p>
+        
+      </div>
+    </div>
+  </center>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const formRegister = document.querySelector('#form_register');
+    const register = async (data) => {
+        try {
+            const response = await fetch('https://perpustakaan-tdrgo7wffa-et.a.run.app/register', {
+              headers: {
+                    "Content-Type": "application/json"
+                },
+              method: 'POST',
+              body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    formRegister.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const body = {
+          "username": username.value,
+          "password": password.value
+        };
+        console.log(body)
+        const result = await register(body);
+        if (result.msg = "Register Berhasil") {
+            location.replace('index.html')
+        }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Data</title>
+</head>
+<body class="bg-gray-800">
+    <h1 class="mt-4 text-white text-3xl font-bold ml-10 w-48">Edit Data</h1>
+        <div class="flex">
+    <div class="w-5/12 flex flex-start ml-6">
+        <form id="form_edit_penerbit" class="ml-5 mt-5">
+            <input type="hidden" id="id_penerbit" name="id">
+
+            <label for="nama" class="block text-sm font-medium text-white">Nama:</label>
+            <input type="text" id="nama" name="nama" required class="mt-1 p-2 border border-gray-300 rounded-md w-96"><br>
+
+            <label for="alamat" class="block text-sm font-medium text-white">Alamat:</label>
+            <input type="text" id="alamat" name="alamat" required class="mt-1 p-2 border border-gray-300 rounded-md w-96"><br>
+
+            <label for="kota" class="block text-sm font-medium text-white">Kota:</label>
+            <input type="text" id="kota" name="kota" required class="mt-1 p-2 border border-gray-300 rounded-md w-96"><br>
+
+            <label for="telepon" class="block text-sm font-medium text-white">Telepon:</label>
+            <input type="text" id="telepon" name="telepon" required class="mt-1 p-2 border border-gray-300 rounded-md w-96"><br>
+
+            <label for="nama" class="block text-sm font-medium text-white">Email:</label>
+            <input type="text" id="email" name="email" required class="mt-1 p-2 border border-gray-300 rounded-md w-96"><br>
+
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded-md cursor-pointer mt-5 hover:bg-blue-800">Simpan Perubahan</button>
+        </form>
+    </div>
+
+    <div class="w-5/12 flex flex-start ml-52 h-screen items-center justify-center">
+        <img src="https://images.pexels.com/photos/3646172/pexels-photo-3646172.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Beautiful Landscape" class="h-auto bg-no-repeat bg-cover w-full mt-0 mb-0">
+    </div>
+</div>
+
+<script>
+    const formPenerbit = document.querySelector('#form_edit_penerbit');
+    document.addEventListener('DOMContentLoaded', () => {
+        buildSectionPenerbitForm()
+    })
+    const getDataPenerbit = async (data) => {
+        dataPenerbit = data
+        try {
+            const response = await fetch(`https://perpustakaan-tdrgo7wffa-et.a.run.app/penerbit/detail/${dataPenerbit}`, {
+            method: 'GET'
+            });
+
+            if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json(); // Assuming the response is JSON
+            return data[0];
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const buildSectionPenerbitForm = async () => {
+        const datas = await getDataPenerbit(localStorage.getItem('dataKey'));
+        console.log(datas);
+        formPenerbit.id_penerbit.value = datas.id_penerbit
+        formPenerbit.nama.value = datas.nama
+        formPenerbit.alamat.value = datas.alamat
+        formPenerbit.kota.value = datas.kota
+        formPenerbit.telepon.value = datas.telepon
+        formPenerbit.email.value = datas.email
+    };
+
+
+    const updateToBuku = async (id_penerbit, body) => {
+
+            try {
+                const response = await fetch(`https://perpustakaan-tdrgo7wffa-et.a.run.app/penerbit/update/${id_penerbit}`, {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        formPenerbit.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const body = {
+                "id_penerbit": id_penerbit.value,
+                "nama": nama.value,
+                "alamat": alamat.value,
+                "kota": kota.value,
+                "telepon": telepon.value,
+                "email": email.value
+            };
+            console.log(body)
+            const result = await updateToBuku(id_penerbit.value, body);
+            
+            if (result.msg = "Penerbit Updated") {
+                location.replace('admin.html')
+            }
+        });
+</script>
+</body>
+</html>

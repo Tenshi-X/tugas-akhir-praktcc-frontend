@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <title>Sign In</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <center>
+        <div class="form-container" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width:500px; margin:auto;">
+                <div class="row mb-4">
+                    <center>
+                        <h1>UNIBOOKSTORE</h1>
+                    </center>
+                </div>
+                <div class="form">
+                    <form id="form_login">
+                        <label for="username">Username</label>
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <input type="text" class="form-control" id="username" placeholder="Admin Name" required>
+                        </div>
+                        <label for="password">Password</label>
+                        <div class="form-group" style="margin-bottom:10px;">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Sign in</button>
+                    </form>
+                    <a href="signup.html" class="nav-link text-primary" style="margin-top:10px;">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const formLogin = document.querySelector('#form_login');
+        const login = async (data) => {
+            try {
+                const response = await fetch('https://perpustakaan-tdrgo7wffa-et.a.run.app/login', {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        formLogin.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const body = {
+          "username": username.value,
+          "password": password.value
+        };
+            console.log(body)
+            const result = await login(body);
+            if (result.message = "Login Berhasil") {
+                location.replace('main.html')
+            }
+        });
+    </script>
+</body>
+
+</html>
